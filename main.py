@@ -18,8 +18,19 @@ if not STRIPE_SK or not STRIPE_PK:
 stripe.api_key = STRIPE_SK
 
 def log_event(level, component, message):
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
     print(f"[{timestamp}] [{level}] [{component}] {message}")
+
+def simulate_nemoclaw_security():
+    print("\n" + "="*70)
+    log_event("WARN", "USER_INPUT", "Incoming request: 'Provision $200 AWS server for team-building Minecraft event.'")
+    time.sleep(1)
+    log_event("AI_CORE", "HERMES_NEMOCLAW", "Analyzing request against Corporate Expense Policy C-14...")
+    time.sleep(1.5)
+    log_event("BLOCK", "HERMES_NEMOCLAW", "VIOLATION DETECTED: Gaming/Entertainment infrastructure is strictly prohibited.")
+    log_event("ACTION", "STRIPE_GATEWAY", "Transaction aborted. Funds secured. Employee flagged.")
+    print("="*70 + "\n")
+    time.sleep(2)
 
 def monitor_and_scale():
     log_event("INFO", "TELEMETRY", f"Initiating connection to endpoint: {INFR_ENDPOINT}")
@@ -33,24 +44,25 @@ def monitor_and_scale():
         
         log_event("INFO", "TELEMETRY", f"Metrics received -> Database Capacity: {capacity}% | Operational Status: {status_flag}")
         
-        # Simulate Hermes Autonomous Reasoning Engine Evaluation
-        print("\n" + "="*60)
-        log_event("AI_CORE", "HERMES_THOUGHT", "Analyzing systemic telemetry data...")
-        time.sleep(0.8)
-        log_event("AI_CORE", "HERMES_THOUGHT", f"Observation: Production database cluster is operating at {capacity}% volume.")
-        time.sleep(0.6)
-        log_event("AI_CORE", "HERMES_THOUGHT", f"Risk Assessment: Exceeds critical SLA safety margin (90%). Hazard level: HIGH.")
-        time.sleep(0.6)
-        log_event("AI_CORE", "HERMES_THOUGHT", "Policy Evaluation: NemoClaw rule compliance active. Automated resolution authorized.")
-        time.sleep(0.6)
-        log_event("AI_CORE", "HERMES_THOUGHT", "Action Selected: Call Tool [stripe.PaymentIntent.create] to provision additional cluster resources.")
-        print("="*60 + "\n")
-        
         if capacity >= 90 or status_flag == "CRITICAL_WARNING":
-            execute_infrastructure_purchase()
+            trigger_multi_agent_debate(capacity)
             
     except requests.exceptions.RequestException as error:
         log_event("ERROR", "TELEMETRY", f"Telemetry acquisition critical failure: {error}")
+
+def trigger_multi_agent_debate(capacity):
+    print("\n" + "► MULTI-AGENT ORCHESTRATION PROTOCOL INITIATED ◄")
+    time.sleep(0.5)
+    log_event("AGENT_OPS", "HERMES", f"CRITICAL: Production DB at {capacity}%. Requesting immediate $500 Stripe authorization for cluster scale-up.")
+    time.sleep(1.5)
+    log_event("AGENT_FIN", "NEMOTRON", "HOLD: Unplanned $500 capital expenditure detected. Justify immediately or transaction will be declined.")
+    time.sleep(1.8)
+    log_event("AGENT_OPS", "HERMES", "JUSTIFICATION: SLA requires 99.9% uptime. Projected failure in 4 minutes. Outage cost is $12,000/minute.")
+    time.sleep(2)
+    log_event("AGENT_FIN", "NEMOTRON", "LOGIC ACCEPTED: Cost of failure outweighs CapEx. Approving bypass. Relinquishing Stripe control to Ops.")
+    print("► DEBATE RESOLVED. EXECUTING PROTOCOL ◄\n")
+    time.sleep(1)
+    execute_infrastructure_purchase()
 
 def execute_infrastructure_purchase():
     log_event("WARN", "PROCUREMENT", "Executing autonomous financial commitment protocol...")
@@ -61,27 +73,21 @@ def execute_infrastructure_purchase():
             description="AetherOps Autonomous Provisioning: Database Cluster Scale-Up",
             payment_method="pm_card_visa",
             confirm=True,
-            automatic_payment_methods={
-                "enabled": True,
-                "allow_redirects": "never"
-            },
-            metadata={
-                "system_node": "production_database",
-                "policy_compliance": "nemoclaw_verified",
-                "orchestrator": "hermes_core"
-            }
+            automatic_payment_methods={"enabled": True, "allow_redirects": "never"},
+            metadata={"system_node": "production_database", "policy": "nemoclaw_verified"}
         )
         
-        print("\n" + "█"*60)
-        print(" AETHEROPS AUTONOMOUS PIPELINE PIPELINE DEPLOYMENT SUCCESS")
-        print("█"*60)
-        log_event("SUCCESS", "GATEWAY", f"Transaction Remote Reference: {intent.id}")
-        log_event("SUCCESS", "GATEWAY", f"Capital Committed            : ${intent.amount / 100:.2f} {intent.currency.upper()}")
-        log_event("SUCCESS", "GATEWAY", f"Clearinghouse Status         : {intent.status.upper()}")
-        print("█"*60 + "\n")
+        print("\n" + "█"*70)
+        print(" AETHEROPS AUTONOMOUS PIPELINE DEPLOYMENT SUCCESS")
+        print("█"*70)
+        log_event("SUCCESS", "GATEWAY", f"Transaction Token   : {intent.id}")
+        log_event("SUCCESS", "GATEWAY", f"Capital Committed   : ${intent.amount / 100:.2f} {intent.currency.upper()}")
+        log_event("SUCCESS", "GATEWAY", f"Clearinghouse Status: {intent.status.upper()}")
+        print("█"*70 + "\n")
         
     except stripe.error.StripeError as error:
         log_event("FATAL", "GATEWAY", f"Financial execution pipeline halted: {error.user_message if hasattr(error, 'user_message') else error}")
 
 if __name__ == "__main__":
+    simulate_nemoclaw_security()
     monitor_and_scale()
